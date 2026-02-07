@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fair Value Partners | operated by 三上浩平税理士事務所</title>
+    <title>Fair Value Partners | 運営：三上浩平税理士事務所</title>
     <meta name="description" content="企業価値評価の専門ファーム「Fair Value Partners（フェアバリュー・パートナーズ）」。三上浩平税理士事務所が運営。元メガバンク・大手FASマネージャーが、監査・税務に強い高品質な算定を適正価格で提供します。" />
     
     <!-- Tailwind CSS -->
@@ -66,12 +66,12 @@
 
       const FEATURES = [
         {
-          title: '銀行員としての「審査視点」',
+          title: '大手銀行の「審査視点」',
           description: '評価レポートは作って終わりではありません。融資審査や監査対応、そして税務調査という「出口」で否認されないことが重要です。メガバンク出身者として、銀行員や監査人がどこを厳しくチェックするかを熟知した、説得力のある論理構成を提供します。',
           icon: Landmark,
         },
         {
-          title: '大手FASの「クオリティ」',
+          title: '大手FASの高品質',
           description: 'クロスボーダー案件や複雑な資本政策を扱ってきた大手FAS（Financial Advisory Service）マネージャーとしての技術を保有しています。ブティックファームでありながら、提供する計算ロジックやモデリングは、世界基準のトップクオリティです。',
           icon: ShieldCheck,
         },
@@ -118,16 +118,16 @@
       const PROFILE_DETAILS = {
         name: '三上 浩平',
         title: 'Fair Value Partners 代表 / 三上浩平税理士事務所 代表税理士',
-        intro: '「銀行員の視点」「FASの技術」「経営者感覚」。この3つを兼ね備えたバリュエーションの専門家として、クライアントの企業価値向上に貢献します。税理士としての法的責任感と、コンサルタントとしての課題解決力を両立させ、信頼できるパートナーとなります。',
+        intro: '「銀行員の視点」「大手FASのクオリティ」「経営者目線」。この3つを兼ね備えたバリュエーションの専門家として、クライアントの企業価値向上に貢献します。税理士としての法的責任感と、コンサルタントとしての課題解決力を両立させ、信頼できるパートナーとなります。',
         history: [
           {
             year: '2008 - 2019',
-            role: '国内メガバンク',
-            desc: '会計専門部署にてIFRS連結決算、減損テスト、大型出資・投資案件に関する会計処理（PPA）統括を担当。融資審査や格付の裏側にある「銀行が企業をどう評価するか」という視点を徹底的に習得。'
+            role: '国内メガバンク（11年）',
+            desc: '会計専門部署にてIFRS連結会計、減損テスト、PPA統括を担当。融資審査や格付の裏側にある「銀行が企業をどう評価するか」という視点を徹底的に習得。'
           },
           {
             year: '2019 - 2022',
-            role: '大手系FAS・コンサルティングファーム マネージャー',
+            role: '大手系FAS・コンサルティングファーム マネージャー（4年）',
             desc: 'M&Aアドバイザリー、バリュエーション、PPAのプロジェクトマネージャーとして、クロスボーダー案件を含む多数の難解なプロジェクトをリード。世界基準の評価技術を磨く。'
           },
           {
@@ -188,7 +188,7 @@
                     onClick={() => setIsOpen(!isOpen)}
                     className="text-slate-800 hover:text-slate-600 focus:outline-none"
                   >
-                    <Menu size={24} />
+                    {isOpen ? <X size={24} /> : <Menu size={24} />}
                   </button>
                 </div>
               </div>
@@ -239,18 +239,18 @@
                   プロフェッショナルの<span className="text-accent">公平性（Fair Value）</span>を。
                 </h1>
                 <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl leading-relaxed font-medium">
-                  銀行員の視点、FASの専門技術、そして経営者としての感覚。<br className="hidden sm:block"/>
+                  銀行員の視点、大手FASのクオリティ、そして経営者目線。<br className="hidden sm:block"/>
                   三位一体の視点を持つ専門家が、貴社の企業価値を適正に評価します。
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-10 text-sm font-bold text-slate-700">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="text-accent" size={20} />
-                    <span>銀行員としての「審査・出口」視点</span>
+                    <span>大手銀行の「審査・出口」視点</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="text-accent" size={20} />
-                    <span>大手FAS の「高クオリティ」</span>
+                    <span>大手FASの高品質</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="text-accent" size={20} />
@@ -481,9 +481,9 @@
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-12 gap-12 items-center">
                 <div className="lg:col-span-4 relative lg:col-start-2">
-                  <div className="aspect-square rounded-lg overflow-hidden shadow-xl bg-slate-200">
+                  <div className="aspect-[3/4] rounded-lg overflow-hidden shadow-xl bg-slate-200">
                     <img 
-                      src="/mikami-profile.jpg" 
+                      src="mikami-profile.jpg" 
                       alt="三上 浩平" 
                       className="w-full h-full object-cover object-center"
                     />
@@ -492,7 +492,7 @@
                   <div className="absolute -top-4 -left-4 w-16 h-16 border-2 border-accent -z-10 opacity-50"></div>
                 </div>
 
-                <div className="lg:col-span-7 lg:col-start-7">
+                <div className="lg:col-span-6 lg:col-start-7">
                   <span className="text-accent font-semibold tracking-wider text-sm uppercase">Representative</span>
                   <h2 className="text-3xl font-serif font-bold text-primary mt-2 mb-2">{PROFILE_DETAILS.name}</h2>
                   <p className="text-slate-500 font-medium mb-6">{PROFILE_DETAILS.title}</p>
@@ -704,7 +704,7 @@
                   <p className="text-xs text-slate-500 mb-4">運営：三上浩平税理士事務所</p>
                   <p className="text-sm leading-relaxed mb-4">
                     東京都港区港南（品川）を拠点とする、企業価値評価専門のプロフェッショナルファーム。<br />
-                    銀行と大手FASで培った専門性と、税理士事務所としての信頼で、貴社の経営判断を強力にサポートします。
+                    銀行とFASで培った専門性と、税理士事務所としての信頼で、貴社の経営判断を強力にサポートします。
                   </p>
                 </div>
                 <div>
