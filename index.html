@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fair Value Partners | 運営：三上浩平税理士事務所</title>
+    <meta name="description" content="企業価値評価の専門ファーム「Fair Value Partners（フェアバリュー・パートナーズ）」。三上浩平税理士事務所が運営。元メガバンク・大手FASマネージャーが、監査・税務に強い高品質な算定を適正価格で提供します。" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#0f172a', // Slate 900
+              secondary: '#64748b', // Slate 500
+              accent: '#b49b57', // Muted Gold
+              accentHover: '#8d783e',
+              light: '#f8fafc',
+            },
+            fontFamily: {
+              sans: ['"Helvetica Neue"', 'Arial', '"Hiragino Kaku Gothic ProN"', '"Hiragino Sans"', 'Meiryo', 'sans-serif'],
+              serif: ['"Times New Roman"', '"Yu Mincho"', '"Hiragino Mincho ProN"', 'serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    </style>
+
+    <!-- React & Babel for Single File Execution -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect } from 'react';
+      import ReactDOM from 'react-dom/client';
+      import { ChartBar, Landmark, Briefcase, Scale, Calculator, Building2, Users, Wallet, Zap, ShieldCheck, Menu, X, ArrowRight, CheckCircle, CheckCircle2, Phone, Mail, MapPin, Loader2, AlertCircle, Check } from 'lucide-react';
+
+      // --- Constants ---
+      const NAV_LINKS = [
+        { name: 'ホーム', href: '#hero' },
+        { name: '選ばれる理由', href: '#features' },
+        { name: 'サービス', href: '#services' },
+        { name: '料金体系', href: '#pricing' },
+        { name: '代表紹介', href: '#profile' },
+        { name: 'お問い合わせ', href: '#contact' },
+      ];
+
+      const FEATURES = [
+        {
+          title: '銀行11年の「審査視点」',
+          description: '評価レポートは作って終わりではありません。融資審査や監査対応、そして税務調査という「出口」で否認されないことが重要です。メガバンク出身者として、銀行員や監査人がどこを厳しくチェックするかを熟知した、説得力のある論理構成を提供します。',
+          icon: Landmark,
+        },
+        {
+          title: '大手FAS 4年の「技術品質」',
+          description: 'クロスボーダー案件や複雑な資本政策を扱ってきた大手FAS（Financial Advisory Service）マネージャーとしての技術を保有しています。ブティックファームでありながら、提供する計算ロジックやモデリングは、世界基準のトップクオリティです。',
+          icon: ShieldCheck,
+        },
+        {
+          title: 'Fair Pricing Model',
+          description: '「安さ」ではなく「合理性」を選んでいただくための価格モデルです。大手ファーム特有の重層的な管理構造（パートナー、ディレクター、マネージャー等の階層）を廃し、プロが直接実務を行うことで、品質を犠牲にすることなく劇的なコストダウンを実現しました。',
+          icon: Scale,
+        },
+      ];
+
+      const SERVICES = [
+        {
+          title: '企業価値評価 (Valuation)',
+          description: 'M&A、組織再編、TOB等における株式価値算定を実施します。第三者委員会等の公正な評価が必要な場面で、銀行・FAS出身の高度なロジックに基づいた算定書を提供します。',
+          icon: ChartBar,
+          items: ['M&Aにおける株式価値算定', '第三者割当増資時の株価算定', 'スクイーズアウト（強制取得）時の価格算定']
+        },
+        {
+          title: '相続・事業承継における株価算定',
+          description: '非上場株式の相続税評価および事業承継対策支援を行います。税理士事務所としての知見を活かし、財産評価基本通達に基づく算定はもちろん、「総則6項」リスクへの対応など、税務当局への対抗要件を備えた評価を実施します。',
+          icon: Users,
+          items: ['類似業種比準価額・純資産価額の算定', '事業承継税制・株価引き下げスキームの立案', '税務調査・総則6項（租税回避）リスクへの対応']
+        },
+        {
+          title: '無形資産評価 (PPA)',
+          description: 'M&A実行後の会計処理（PPA: Purchase Price Allocation）における無形資産（顧客リスト、技術、ブランド等）の評価を行います。監査法人対応を見据えた論理的な評価モデルを構築します。',
+          icon: Calculator,
+          items: ['無形資産の識別・測定', 'PPA算定報告書の作成', '監査法人・評価会社との協議サポート']
+        },
+        {
+          title: 'ストックオプション評価',
+          description: '役員・従業員へのインセンティブ報酬（SO、有償SO、RS等）の公正価値評価を行います。税務リスクと会計基準の双方を考慮したスキーム設計から評価までワンストップで支援します。',
+          icon: Scale,
+          items: ['有償ストックオプションの評価', '税制適格ストックオプションの設計支援', '会計基準（企業会計基準第8号）準拠の評価']
+        },
+        {
+          title: '減損テスト・財務アドバイザリー',
+          description: '固定資産やのれんの減損テスト、事業計画の策定支援を行います。元銀行員としての知見を活かし、金融機関からの融資獲得やリスケジュール交渉に強い事業計画を作成します。',
+          icon: Landmark,
+          items: ['減損損失の認識・測定', '中期経営計画の策定支援', '銀行融資・資金調達サポート']
+        }
+      ];
+
+      const PROFILE_DETAILS = {
+        name: '三上 浩平',
+        title: 'Fair Value Partners 代表 / 三上浩平税理士事務所 代表税理士',
+        intro: '「銀行の視点」「FASの技術」「経営者のコスト感覚」。この3つを兼ね備えたバリュエーションの専門家として、クライアントの企業価値向上に貢献します。税理士としての法的責任感と、コンサルタントとしての課題解決力を両立させ、信頼できるパートナーとなります。',
+        history: [
+          {
+            year: '2008 - 2019',
+            role: '国内メガバンク（11年）',
+            desc: '会計専門部署にてIFRS連結会計、減損テスト、PPA統括を担当。融資審査や格付の裏側にある「銀行が企業をどう評価するか」という視点を徹底的に習得。'
+          },
+          {
+            year: '2019 - 2022',
+            role: '大手系FAS・コンサルティングファーム マネージャー（4年）',
+            desc: 'M&Aアドバイザリー、バリュエーション、PPAのプロジェクトマネージャーとして、クロスボーダー案件を含む多数の難解なプロジェクトをリード。世界基準の評価技術を磨く。'
+          },
+          {
+            year: '2022.09 - Present',
+            role: '三上浩平税理士事務所 開業 / Fair Value Partners 設立',
+            desc: '「大手品質を、ブティックファームの価格で」という理念のもと独立。高度な専門性を必要とする評価業務を、税理士事務所としての規律と適正価格で提供する「フェア・プライシング・モデル」を提唱。'
+          }
+        ]
+      };
+
+      // --- Components ---
+      
+      const Navbar = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [isScrolled, setIsScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setIsScrolled(window.scrollY > 10);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        return (
+          <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center h-16">
+                <div className="flex-shrink-0 flex items-center">
+                  <a href="#" className={`font-serif text-xl font-bold tracking-wider ${isScrolled ? 'text-primary' : 'text-slate-900'} flex flex-col`}>
+                    <span>Fair Value Partners</span>
+                    <span className={`text-[10px] sm:text-xs font-sans font-normal ${isScrolled ? 'text-secondary' : 'text-slate-600'} mt-1`}>
+                      運営：三上浩平税理士事務所 | 企業価値評価の専門ファーム
+                    </span>
+                  </a>
+                </div>
+                
+                <div className="hidden md:flex space-x-8">
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      className={`text-sm font-medium hover:text-accent transition-colors ${isScrolled ? 'text-slate-700' : 'text-slate-800'}`}
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                  <a
+                    href="#contact"
+                    className="px-5 py-2 text-sm font-medium text-white bg-primary hover:bg-slate-800 transition-colors rounded-sm border border-primary"
+                  >
+                    無料相談
+                  </a>
+                </div>
+
+                <div className="md:hidden flex items-center">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="text-slate-800 hover:text-slate-600 focus:outline-none"
+                  >
+                    <Menu size={24} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {isOpen && (
+              <div className="md:hidden bg-white shadow-xl absolute w-full">
+                <div className="px-4 pt-2 pb-6 space-y-2">
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      className="block px-3 py-3 text-base font-medium text-slate-700 hover:text-accent hover:bg-slate-50 rounded-md"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                  <a
+                    href="#contact"
+                    className="block mt-4 text-center px-4 py-3 text-base font-medium text-white bg-accent hover:bg-accentHover rounded-md"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    無料相談を予約する
+                  </a>
+                </div>
+              </div>
+            )}
+          </nav>
+        );
+      };
+
+      const Hero = () => {
+        return (
+          <section id="hero" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-50">
+            <div className="absolute inset-0 z-0 opacity-10">
+               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center"></div>
+            </div>
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="lg:w-3/4">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 bg-primary/5 text-primary font-semibold text-xs tracking-widest uppercase rounded-sm border border-primary/10">
+                  <Scale size={14} />
+                  <span>Fair Value Partners | 運営：三上浩平税理士事務所</span>
+                </div>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-primary leading-tight mb-6">
+                  その価値に、<br />
+                  プロフェッショナルの<span className="text-accent">公平性（Fair Value）</span>を。
+                </h1>
+                <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl leading-relaxed font-medium">
+                  銀行の視点、FASの技術、そして経営者としてのコスト感覚。<br className="hidden sm:block"/>
+                  三位一体の視点を持つ専門家が、貴社の企業価値を適正に評価します。
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 mb-10 text-sm font-bold text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="text-accent" size={20} />
+                    <span>銀行11年の「審査・出口」視点</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="text-accent" size={20} />
+                    <span>大手FAS 4年の「技術品質」</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="text-accent" size={20} />
+                    <span>税理士事務所の「信頼」と「適正価格」</span>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a href="#contact" className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-primary hover:bg-slate-800 transition-colors rounded-sm shadow-lg group">
+                    無料相談・お見積り
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                  <a href="#features" className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-primary bg-white border border-slate-300 hover:bg-slate-50 transition-colors rounded-sm shadow-sm">
+                    選ばれる理由
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="absolute right-0 bottom-0 w-1/3 h-full bg-gradient-to-l from-slate-100 to-transparent pointer-events-none hidden lg:block"></div>
+          </section>
+        );
+      };
+
+      const Features = () => {
+        return (
+          <section id="features" className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <span className="text-accent font-semibold tracking-wider text-sm uppercase">Why Fair Value Partners?</span>
+                <h2 className="text-3xl font-serif font-bold text-primary mt-2 mb-4">当事務所が選ばれる理由</h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
+                  単なる「計算屋」ではありません。<br />
+                  金融と財務の最前線を知るプロフェッショナルが、戦略的なパートナーとして支援します。
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-10">
+                {FEATURES.map((feature, index) => (
+                  <div key={index} className="bg-slate-50 p-8 rounded-lg border border-slate-100 hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center group">
+                    <div className="w-16 h-16 bg-white text-accent border border-slate-200 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-accent group-hover:bg-accent group-hover:text-white transition-colors duration-300">
+                      <feature.icon size={32} />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-4">{feature.title}</h3>
+                    <p className="text-slate-600 leading-relaxed text-sm">
+                      {feature.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Services = () => {
+        return (
+          <section id="services" className="py-20 bg-slate-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <span className="text-accent font-semibold tracking-wider text-sm uppercase">Service Lineup</span>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary mt-2 mb-6">提供サービス</h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
+                  企業価値評価（バリュエーション）を核とし、M&Aや資金調達を成功に導くための専門サービスを提供します。
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-8">
+                {SERVICES.map((service, index) => (
+                  <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-slate-100 flex flex-col">
+                    <div className="p-8 flex-1">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-slate-100 rounded-lg text-primary">
+                          <service.icon size={24} />
+                        </div>
+                        <h3 className="text-xl font-bold text-slate-800">{service.title}</h3>
+                      </div>
+                      <p className="text-slate-600 mb-6 text-sm leading-relaxed">
+                        {service.description}
+                      </p>
+                      <ul className="space-y-3">
+                        {service.items.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                            <CheckCircle2 size={16} className="text-accent mt-0.5 flex-shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="bg-slate-50 px-8 py-4 border-t border-slate-100">
+                      <a href="#contact" className="text-primary font-medium text-sm hover:text-accent flex items-center gap-1 transition-colors">
+                        詳しく相談する &rarr;
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Pricing = () => {
+        return (
+          <section id="pricing" className="py-20 bg-slate-50 border-t border-slate-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <span className="text-accent font-semibold tracking-wider text-sm uppercase">Fair Pricing Model</span>
+                <h2 className="text-3xl font-serif font-bold text-primary mt-2 mb-4">料金体系</h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
+                  私たちは「安売り」はしません。しかし、お客様に不要なコストも転嫁しません。<br />
+                  品質を維持しながら、中間コストを極限まで排除した「適正価格（Fair Price）」を提示します。
+                </p>
+              </div>
+
+              <div className="mb-16">
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200 max-w-4xl mx-auto">
+                  <div className="grid grid-cols-3 bg-slate-900 text-white p-4 text-sm md:text-base font-bold text-center">
+                    <div className="col-span-1">比較項目</div>
+                    <div className="col-span-1 border-r border-slate-700">大手FAS・会計事務所</div>
+                    <div className="col-span-1 bg-accent text-white -my-4 py-4 flex items-center justify-center relative">
+                      <span className="relative z-10">Fair Value Partners</span>
+                      <div className="absolute top-0 left-0 w-full h-full bg-accent hover:bg-accentHover transition-colors"></div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 border-b border-slate-100">
+                    <div className="p-4 flex items-center justify-center font-bold text-slate-700 bg-slate-50 text-xs md:text-sm">
+                      担当者の質
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-600 border-r border-slate-100">
+                      <div className="font-bold text-slate-800 mb-1">階層構造</div>
+                      <div className="text-xs">
+                        パートナーが営業し、<br />
+                        実務は若手が担当するケース多
+                      </div>
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-800 bg-yellow-50/30">
+                      <div className="font-bold text-accent mb-1">Expert Only</div>
+                      <div className="text-xs">
+                        元FASマネージャーが<br />
+                        全工程を直接担当
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 border-b border-slate-100">
+                    <div className="p-4 flex items-center justify-center font-bold text-slate-700 bg-slate-50 text-xs md:text-sm">
+                      間接コスト
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-600 border-r border-slate-100">
+                      <div className="font-bold text-slate-800 mb-1">High Cost</div>
+                      <div className="text-xs">
+                        オフィス賃料、ブランド料、<br />
+                        バックオフィス費用が上乗せ
+                      </div>
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-800 bg-yellow-50/30">
+                      <div className="font-bold text-accent mb-1">Rational</div>
+                      <div className="text-xs">
+                        実務に関係ない固定費を<br />
+                        徹底的にカット
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3">
+                    <div className="p-4 flex items-center justify-center font-bold text-slate-700 bg-slate-50 text-xs md:text-sm">
+                      報酬水準
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-600 border-r border-slate-100 flex flex-col items-center justify-center">
+                      <div className="font-bold text-xl text-slate-400">¥ High</div>
+                      <div className="text-xs mt-1">ブランドプレミアム込</div>
+                    </div>
+                    <div className="p-4 text-center text-sm text-slate-800 bg-yellow-50/30 flex flex-col items-center justify-center">
+                      <div className="font-bold text-2xl text-accent">Fair</div>
+                      <div className="text-xs font-bold text-accent mt-1">品質対比で業界最低水準</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm hover:border-accent/50 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-800 mb-2">簡易的な株価算定</h3>
+                  <p className="text-slate-500 text-sm mb-4">税務申告用・社内検討用など</p>
+                  <div className="flex items-baseline gap-1 mb-4">
+                    <span className="text-3xl font-bold text-primary">15</span>
+                    <span className="text-sm font-bold text-slate-600">万円〜</span>
+                    <span className="text-xs text-slate-400 ml-2">（税別）</span>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    ※評価対象会社の規模や複雑性により変動します。<br />
+                    ※最短3営業日での納品が可能です。
+                  </p>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg border-2 border-accent/20 shadow-md relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                    Standard
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-800 mb-2">M&A・第三者割当増資用 評価</h3>
+                  <p className="text-slate-500 text-sm mb-4">詳細な算定書作成・第三者委員会対応</p>
+                  <div className="flex items-baseline gap-1 mb-4">
+                    <span className="text-3xl font-bold text-primary">30</span>
+                    <span className="text-sm font-bold text-slate-600">万円〜</span>
+                    <span className="text-xs text-slate-400 ml-2">（税別）</span>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    ※一般的な大手FASの1/3程度の価格設定です。<br />
+                    ※監査法人・税理士法人からの照会対応も含みます。
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-10 text-center">
+                 <a href="#contact" className="inline-flex items-center text-accent hover:text-accentHover font-bold border-b-2 border-accent hover:border-accentHover transition-colors">
+                   具体的なお見積りはこちらから（無料）
+                 </a>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Profile = () => {
+        return (
+          <section id="profile" className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid lg:grid-cols-12 gap-12 items-center">
+                <div className="lg:col-span-4 relative lg:col-start-2">
+                  <div className="aspect-square rounded-lg overflow-hidden shadow-xl bg-slate-200">
+                    <img 
+                      src="/mikami-profile.jpg" 
+                      alt="三上 浩平" 
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                  <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-slate-100 -z-10 rounded-full opacity-50"></div>
+                  <div className="absolute -top-4 -left-4 w-16 h-16 border-2 border-accent -z-10 opacity-50"></div>
+                </div>
+
+                <div className="lg:col-span-7 lg:col-start-7">
+                  <span className="text-accent font-semibold tracking-wider text-sm uppercase">Representative</span>
+                  <h2 className="text-3xl font-serif font-bold text-primary mt-2 mb-2">{PROFILE_DETAILS.name}</h2>
+                  <p className="text-slate-500 font-medium mb-6">{PROFILE_DETAILS.title}</p>
+                  
+                  <div className="bg-slate-50 p-6 rounded-md border-l-4 border-accent mb-8">
+                    <p className="text-slate-700 font-medium leading-relaxed italic">
+                      {PROFILE_DETAILS.intro}
+                    </p>
+                  </div>
+
+                  <div className="space-y-8">
+                    <h3 className="text-lg font-bold text-primary border-b border-slate-200 pb-2">Professional Career</h3>
+                    {PROFILE_DETAILS.history.map((item, index) => (
+                      <div key={index} className="flex flex-col sm:flex-row gap-2 sm:gap-6 relative">
+                        {index !== PROFILE_DETAILS.history.length - 1 && (
+                          <div className="hidden sm:block absolute left-[8.5rem] top-8 bottom-[-2rem] w-px bg-slate-200"></div>
+                        )}
+                        
+                        <div className="w-32 flex-shrink-0 text-slate-500 font-semibold pt-1">{item.year}</div>
+                        <div className="pb-4">
+                          <h4 className="font-bold text-slate-800 text-lg">{item.role}</h4>
+                          <p className="text-slate-600 mt-2 leading-relaxed text-sm">{item.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Contact = () => {
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const [showModal, setShowModal] = useState(false);
+        const [formError, setFormError] = useState(null);
+        const FORMSPREE_FORM_ID = "YOUR_FORM_ID_HERE"; 
+
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+          setIsSubmitting(true);
+          setFormError(null);
+          const formData = new FormData(e.currentTarget);
+          const data = Object.fromEntries(formData.entries());
+
+          try {
+            if (FORMSPREE_FORM_ID === "YOUR_FORM_ID_HERE") {
+              await new Promise(resolve => setTimeout(resolve, 1500));
+              setIsSubmitting(false);
+              setShowModal(true);
+              e.currentTarget.reset();
+              return;
+            }
+            const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+              body: JSON.stringify(data)
+            });
+            if (response.ok) {
+              setIsSubmitting(false);
+              setShowModal(true);
+              e.currentTarget.reset();
+            } else {
+              const errorData = await response.json();
+              throw new Error(errorData.error || '送信に失敗しました');
+            }
+          } catch (error) {
+            setIsSubmitting(false);
+            setFormError('送信中にエラーが発生しました。時間をおいて再度お試しいただくか、お電話にてご連絡ください。');
+          }
+        };
+
+        return (
+          <section id="contact" className="py-20 bg-primary text-white relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid lg:grid-cols-2 gap-16">
+                <div>
+                  <span className="text-accent font-semibold tracking-wider text-sm uppercase">Contact</span>
+                  <h2 className="text-3xl md:text-4xl font-serif font-bold mt-2 mb-6">お問い合わせ</h2>
+                  <p className="text-slate-300 mb-8 leading-relaxed">
+                    企業価値評価、M&A、資金調達に関するご相談は、お気軽にお問い合わせください。<br />
+                    初回のご相談（30分）は無料にて承っております。
+                  </p>
+
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-slate-800 rounded-lg">
+                        <Phone className="text-accent" size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg">お電話</h3>
+                        <p className="text-slate-300 mt-1">080-9063-2273</p>
+                        <p className="text-xs text-slate-400 mt-1">平日 10:00 - 18:00</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-slate-800 rounded-lg">
+                        <Mail className="text-accent" size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg">メール</h3>
+                        <p className="text-slate-300 mt-1">kohei.mikami.zeirishi@gmail.com</p>
+                        <p className="text-xs text-slate-400 mt-1">24時間受付（2営業日以内に返信）</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-slate-800 rounded-lg">
+                        <MapPin className="text-accent" size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg">所在地</h3>
+                        <p className="text-slate-300 mt-1">
+                          〒108-0075<br />
+                          東京都港区港南4-2-7-4020
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">JR品川駅 港南口より徒歩圏内</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-8 text-slate-800 shadow-xl">
+                  <h3 className="text-xl font-bold mb-6">お問い合わせフォーム</h3>
+                  {formError && (
+                    <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-sm flex items-start gap-2 text-sm">
+                      <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
+                  <form className="space-y-4" onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">姓</label>
+                        <input name="lastName" type="text" required className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none" placeholder="山田" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">名</label>
+                        <input name="firstName" type="text" required className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none" placeholder="太郎" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">会社名</label>
+                      <input name="company" type="text" className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none" placeholder="株式会社〇〇" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">メールアドレス</label>
+                      <input name="email" type="email" required className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none" placeholder="example@company.com" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">ご相談内容のカテゴリ</label>
+                      <select name="category" className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none bg-white">
+                        <option value="未選択">選択してください</option>
+                        <option value="企業価値評価（株価算定）について">企業価値評価（株価算定）について</option>
+                        <option value="相続・事業承継（株価評価）について">相続・事業承継（株価評価）について</option>
+                        <option value="PPA（無形資産評価）について">PPA（無形資産評価）について</option>
+                        <option value="ストックオプション評価について">ストックオプション評価について</option>
+                        <option value="資金調達・財務コンサルティングについて">資金調達・財務コンサルティングについて</option>
+                        <option value="その他">その他</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">お問い合わせ詳細</label>
+                      <textarea name="message" rows={4} required className="w-full px-4 py-2 border border-slate-300 rounded-sm focus:ring-2 focus:ring-primary outline-none" placeholder="ご相談内容の詳細"></textarea>
+                    </div>
+                    <button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accentHover text-white font-bold py-3 rounded-sm transition-colors shadow-md flex items-center justify-center gap-2 disabled:opacity-70">
+                      {isSubmitting ? <><Loader2 className="animate-spin" size={20} />送信中...</> : 'お問い合わせを送信する'}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {showModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+                <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl text-center transform animate-in zoom-in-95 duration-300">
+                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">送信完了</h3>
+                  <p className="text-slate-600 mb-8 leading-relaxed">
+                    お問い合わせありがとうございます。<br/>担当者より2営業日以内にご連絡させていただきます。
+                  </p>
+                  <button onClick={() => setShowModal(false)} className="w-full bg-primary text-white font-bold py-3 rounded-sm hover:bg-slate-800 transition-colors">
+                    閉じる
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        const currentYear = new Date().getFullYear();
+        return (
+          <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid md:grid-cols-4 gap-8 mb-8">
+                <div className="col-span-2">
+                  <h2 className="text-white text-xl font-serif font-bold mb-1">Fair Value Partners</h2>
+                  <p className="text-xs text-slate-500 mb-4">運営：三上浩平税理士事務所</p>
+                  <p className="text-sm leading-relaxed mb-4">
+                    東京都港区港南（品川）を拠点とする、企業価値評価専門のプロフェッショナルファーム。<br />
+                    銀行とFASで培った専門性と、税理士事務所としての信頼で、貴社の経営判断を強力にサポートします。
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-4">Service</h3>
+                  <ul className="space-y-2 text-sm">
+                    <li><a href="#services" className="hover:text-accent transition-colors">企業価値評価</a></li>
+                    <li><a href="#services" className="hover:text-accent transition-colors">PPA（無形資産評価）</a></li>
+                    <li><a href="#services" className="hover:text-accent transition-colors">ストックオプション評価</a></li>
+                    <li><a href="#services" className="hover:text-accent transition-colors">財務アドバイザリー</a></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-4">Menu</h3>
+                  <ul className="space-y-2 text-sm">
+                    {NAV_LINKS.map((link) => (
+                      <li key={link.name}>
+                        <a href={link.href} className="hover:text-accent transition-colors">
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+                <p>&copy; {currentYear} Fair Value Partners (Mikami Kohei Tax Accountant Office). All rights reserved.</p>
+                <div className="flex space-x-4 mt-4 md:mt-0">
+                  <a href="#" className="hover:text-white transition-colors">プライバシーポリシー</a>
+                  <a href="#" className="hover:text-white transition-colors">特定商取引法に基づく表記</a>
+                </div>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      const App = () => {
+        return (
+          <div className="min-h-screen bg-white text-slate-800 font-sans">
+            <Navbar />
+            <main>
+              <Hero />
+              <Features />
+              <Services />
+              <Pricing />
+              <Profile />
+              <Contact />
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
