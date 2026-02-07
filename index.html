@@ -631,7 +631,7 @@
                 <div className="bg-white rounded-lg p-8 text-slate-800 shadow-xl">
                   <h3 className="text-xl font-bold mb-6">お問い合わせフォーム</h3>
                   
-                  {FORMSPREE_FORM_ID === "YOUR_FORM_ID_HERE" && (
+                  {FORMSPREE_FORM_ID === "xbdajowl" && (
                     <div className="mb-4 p-3 bg-blue-50 text-blue-700 text-xs rounded border border-blue-200">
                       <strong>管理者様へ:</strong> FormspreeのID設定が必要です。コード内の <code>FORMSPREE_FORM_ID</code> を更新してください。現在はデモモードで動作します。
                     </div>
@@ -645,7 +645,7 @@
                   )}
 
                   <form 
-                    action={`https://formspree.io/f/${xbdajowl}`}
+                    action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`}
                     method="POST"
                     onSubmit={handleSubmit}
                     className="space-y-4"
